@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Задачник</title>
+  <meta name="description" content="Решения задач из задачника по физике Чертова и Воробьёва">
+  <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Задачник">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="device">
+    <div id="app">
+      <!-- Список задач -->
+      <section id="screen-list" class="screen active" aria-label="Список задач">
+        <header class="nav nav-large" id="list-nav">
+          <div class="nav-bar"><div class="nav-title-small">Задачник</div></div>
+          <div class="large-wrap">
+            <h1 class="large-title">Задачник</h1>
+            <p class="subtitle" id="book-sub"></p>
+          </div>
+          <div class="search-wrap">
+            <label class="search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+              <input id="q" type="search" inputmode="decimal" enterkeyhint="search" autocomplete="off"
+                     placeholder="Номер задачи, например 3.12" aria-label="Поиск задачи">
+              <button id="q-clear" class="clear" type="button" aria-label="Очистить" hidden>
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg>
+              </button>
+            </label>
+            <button id="kb-toggle" class="kb-toggle" type="button" aria-label="Переключить клавиатуру">Аа</button>
+          </div>
+        </header>
+        <main class="scroll" id="list-scroll">
+          <div id="list"></div>
+          <p class="foot" id="foot"></p>
+        </main>
+      </section>
+
+      <!-- Экран задачи -->
+      <section id="screen-task" class="screen" aria-label="Задача">
+        <header class="nav">
+          <div class="nav-bar">
+            <button class="back" id="back" type="button">
+              <svg viewBox="0 0 12 21" aria-hidden="true"><path d="M10.5 1.5 1.5 10.5l9 9"/></svg>
+              <span>Задачи</span>
+            </button>
+            <div class="nav-title-small" id="task-nav-title"></div>
+            <div class="nav-right"></div>
+          </div>
+        </header>
+        <main class="scroll" id="task-scroll">
+          <article id="task"></article>
+        </main>
+      </section>
+    </div>
+  </div>
+
+  <script src="vendor/katex/katex.min.js"></script>
+  <script src="data/figures.js"></script>
+  <script src="data/tasks.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

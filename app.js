@@ -166,7 +166,9 @@
   function renderTask(t) {
     current = t;
     const i = sorted.indexOf(t), prev = sorted[i - 1], next = sorted[i + 1];
-    const fig = typeof t.figure === 'function' ? t.figure() : (t.figure || '');
+    let fig = '';
+    try { fig = typeof t.figure === 'function' ? t.figure() : (t.figure || ''); }
+    catch (e) { console.error('Чертёж задачи ' + t.id + ':', e); }   // без чертежа, но задача открывается
     const given = (t.given || []).map(([g, si]) =>
       `<div>${tex(g)}</div><div class="si">${si ? tex(si) : '<span style="opacity:.5">—</span>'}</div>`).join('');
     taskEl.innerHTML = `

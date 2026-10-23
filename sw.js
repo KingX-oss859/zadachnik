@@ -1,11 +1,12 @@
 /* Офлайн-кэш. При добавлении задач увеличьте VERSION — телефон подтянет новое. */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = 'zadachnik-' + VERSION;
 const ASSETS = [
   './',
   'app.js',
   'data/figures.js',
   'data/tasks.js',
+  'data/tasks-1-kinematika.js',
   'icons/apple-touch-icon.png',
   'icons/icon-192.png',
   'icons/icon-512.png',
@@ -41,11 +42,14 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
-/* Сначала сеть (чтобы новые задачи появлялись сразу), без сети — из кэша */
+/* Сначала сеть (чтобы новые задачи появлялись сразу), без сети — из кэша.
+   no-cache: браузер сверяет файл с сервером, а не берёт его из HTTP-кэша —
+   иначе новый tasks-*.js может прийти вместе со старым figures.js */
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  const req = e.request.mode === 'navigate' ? e.request : new Request(e.request, { cache: 'no-cache' });
   e.respondWith(
-    fetch(e.request).then(r => {
+    fetch(req).then(r => {
       const copy = r.clone();
       caches.open(CACHE).then(c => c.put(e.request, copy));
       return r;

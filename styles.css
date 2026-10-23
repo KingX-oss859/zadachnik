@@ -247,6 +247,13 @@ svg .pt { fill: var(--blue); }
 svg .guide { stroke: var(--fg3); stroke-width: 1; stroke-dasharray: 5 4; }
 svg .dim { stroke: var(--fg2); stroke-width: 1.2; fill: none; }
 svg .arh { fill: var(--fg2); }
+svg .arh.blue { fill: var(--blue); }
+svg .axis { stroke: var(--fg); stroke-width: 1.2; fill: none; }
+svg .crv { fill: none; stroke: var(--fg); stroke-width: 2.2; stroke-linejoin: round; }
+svg .crv.dash { stroke-dasharray: 7 5; }
+svg .crv.blue { stroke: var(--blue); }
+svg .vec { stroke: var(--fg); stroke-width: 2; fill: none; }
+svg .vec.blue { stroke: var(--blue); }
 svg .tx { fill: var(--fg); font-family: var(--font); font-size: 15px; letter-spacing: 0; }
 svg .tx.it { font-family: "Times New Roman", Times, serif; font-style: italic; font-size: 17px; }
 svg .tx.sm { font-size: 13px; }

@@ -2,14 +2,13 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
   <title>Задачник</title>
   <meta name="description" content="Решения задач из задачника по физике Чертова и Воробьёва">
-  <meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#008080">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Задачник">
   <meta name="format-detection" content="telephone=no">
   <link rel="manifest" href="manifest.webmanifest">
@@ -19,51 +18,156 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="device">
+  <!-- Пиксельные иконки 16×16 / 32×32 -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-app" viewBox="0 0 16 16" shape-rendering="crispEdges">
+      <path d="M2 1h10v14H2z" fill="#000"/>
+      <path d="M3 2h8v12H3z" fill="#000080"/>
+      <path d="M12 2h2v13h-2z" fill="#fff"/><path d="M14 2h1v13h-1zM12 15h3v1h-3z" fill="#000"/>
+      <path d="M5 4h5v3H5z" fill="#ffff00"/><path d="M6 5h3v1H6z" fill="#000"/>
+      <path d="M3 2h1v12H3z" fill="#0000c0"/>
+    </symbol>
+    <symbol id="i-folder" viewBox="0 0 16 16" shape-rendering="crispEdges">
+      <path d="M1 3h5l1 1h7v10H1z" fill="#000"/>
+      <path d="M2 4h4l1 1h6v8H2z" fill="#ffff80"/>
+      <path d="M2 6h11v1H2z" fill="#c0c000"/>
+      <path d="M2 7h11v6H2z" fill="#ffe680"/>
+    </symbol>
+    <symbol id="i-doc" viewBox="0 0 16 16" shape-rendering="crispEdges">
+      <path d="M3 0h7l1 1h1l1 1v1l1 1v12H3z" fill="#000"/>
+      <path d="M4 1h6v4h3v10H4z" fill="#fff"/>
+      <path d="M10 1h1v1h1v1h1v1h-3z" fill="#c0c0c0"/>
+      <path d="M5 7h6v1H5zM5 9h6v1H5zM5 11h6v1H5zM5 13h4v1H5z" fill="#000080"/>
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 32 32" shape-rendering="crispEdges">
+      <path d="M11 2h10v2h3v2h2v3h2v12h-2v3h-2v2h-3v2H11v-2H8v-2H6v-3H4V9h2V6h2V4h3z" fill="#000"/>
+      <path d="M11 3h10v2h3v2h2v3h1v10h-1v3h-2v2h-3v2H11v-2H8v-2H6v-3H5V10h1V7h2V5h3z" fill="#fff"/>
+      <path d="M14 7h4v4h-4zM13 13h5v10h2v2h-8v-2h2v-8h-1z" fill="#000080"/>
+    </symbol>
+    <symbol id="i-warn" viewBox="0 0 32 32" shape-rendering="crispEdges">
+      <path d="M14 2h4v2h1v3h1v3h1v3h1v3h1v3h1v3h1v3h1v3h1v4H3v-4h1v-3h1v-3h1v-3h1v-3h1v-3h1v-3h1V7h1V4h1V2z" fill="#000"/>
+      <path d="M15 3h2v2h1v3h1v3h1v3h1v3h1v3h1v3h1v3h1v2H5v-2h1v-3h1v-3h1v-3h1v-3h1v-3h1V8h1V5h1V3z" fill="#ffff00"/>
+      <path d="M15 10h2v10h-2zM15 23h2v2h-2z" fill="#000"/>
+    </symbol>
+  </svg>
+
+  <div id="desk">
+    <!-- Рабочий стол: видно, когда окно свёрнуто -->
+    <div class="desk-icons">
+      <button class="desk-icon" id="desk-app" type="button">
+        <svg viewBox="0 0 16 16"><use href="#i-app"/></svg><span>Задачник</span>
+      </button>
+    </div>
+
     <div id="app">
-      <!-- Список задач -->
-      <section id="screen-list" class="screen active" aria-label="Список задач">
-        <header class="nav nav-large" id="list-nav">
-          <div class="nav-bar"><div class="nav-title-small">Задачник</div></div>
-          <div class="large-wrap">
-            <h1 class="large-title">Задачник</h1>
-            <p class="subtitle" id="book-sub"></p>
+      <!-- Окно «Задачник»: список задач -->
+      <section id="screen-list" class="window screen" aria-label="Список задач">
+        <div class="title-bar">
+          <svg class="title-icon" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-app"/></svg>
+          <div class="title-bar-text">Задачник</div>
+          <div class="title-bar-controls">
+            <button type="button" data-act="min" aria-label="Свернуть"></button>
+            <button type="button" data-act="max" aria-label="Развернуть"></button>
+            <button type="button" data-act="close" aria-label="Закрыть"></button>
           </div>
-          <div class="search-wrap">
-            <label class="search">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
-              <input id="q" type="search" inputmode="decimal" enterkeyhint="search" autocomplete="off"
-                     placeholder="Номер задачи, например 3.12" aria-label="Поиск задачи">
-              <button id="q-clear" class="clear" type="button" aria-label="Очистить" hidden>
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg>
-              </button>
-            </label>
-            <button id="kb-toggle" class="kb-toggle" type="button" aria-label="Переключить клавиатуру">Аа</button>
+        </div>
+        <nav class="menubar">
+          <button type="button" data-menu="m-file" aria-label="Файл"><u>Ф</u>айл</button>
+          <button type="button" data-menu="m-help" aria-label="Справка"><u>С</u>правка</button>
+        </nav>
+        <div class="toolbar search-wrap">
+          <label for="q" class="tb-label">Найти:</label>
+          <div class="field search">
+            <input id="q" type="search" inputmode="decimal" enterkeyhint="search" autocomplete="off"
+                   placeholder="Номер задачи, например 3.12" aria-label="Поиск задачи">
+            <button id="q-clear" class="clear" type="button" aria-label="Очистить" hidden>
+              <svg viewBox="0 0 8 7" aria-hidden="true"><path d="M0 0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H5v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1V5h1V4h1V3H2V2H1V1H0z"/></svg>
+            </button>
           </div>
-        </header>
-        <main class="scroll" id="list-scroll">
+          <button id="kb-toggle" class="btn kb-toggle" type="button" aria-label="Переключить клавиатуру">Аа</button>
+        </div>
+        <main class="scroll listview" id="list-scroll">
+          <div class="lv-head"><span class="c-num">№</span><span class="c-title">Название</span><span class="c-page">Стр.</span></div>
           <div id="list"></div>
-          <p class="foot" id="foot"></p>
         </main>
+        <div class="status-bar">
+          <p class="status-bar-field" id="foot"></p>
+          <p class="status-bar-field grow" id="book-sub"></p>
+        </div>
       </section>
 
-      <!-- Экран задачи -->
-      <section id="screen-task" class="screen" aria-label="Задача">
-        <header class="nav">
-          <div class="nav-bar">
-            <button class="back" id="back" type="button">
-              <svg viewBox="0 0 12 21" aria-hidden="true"><path d="M10.5 1.5 1.5 10.5l9 9"/></svg>
-              <span>Задачи</span>
-            </button>
-            <div class="nav-title-small" id="task-nav-title"></div>
-            <div class="nav-right"></div>
+      <!-- Окно «Задача N» -->
+      <section id="screen-task" class="window screen" aria-label="Задача">
+        <div class="title-bar">
+          <svg class="title-icon" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-doc"/></svg>
+          <div class="title-bar-text" id="task-nav-title">Задача</div>
+          <div class="title-bar-controls">
+            <button type="button" data-act="min" aria-label="Свернуть"></button>
+            <button type="button" data-act="max" aria-label="Развернуть"></button>
+            <button type="button" data-act="close" aria-label="Закрыть"></button>
           </div>
-        </header>
+        </div>
+        <div class="toolbar">
+          <button class="btn back" id="back" type="button">◄ Назад</button>
+          <span class="tb-sep"></span>
+          <button class="btn" id="tb-prev" type="button">‹ Пред.</button>
+          <button class="btn" id="tb-next" type="button">След. ›</button>
+        </div>
         <main class="scroll" id="task-scroll">
           <article id="task"></article>
         </main>
+        <div class="status-bar">
+          <p class="status-bar-field grow" id="task-status"></p>
+        </div>
       </section>
     </div>
+
+    <!-- Выпадающие меню -->
+    <div class="menu" id="m-file" hidden>
+      <button type="button" data-cmd="find"><u>Н</u>айти задачу…</button>
+      <button type="button" data-cmd="list">Все <u>з</u>адачи</button>
+      <hr>
+      <button type="button" data-cmd="min"><u>З</u>акрыть</button>
+    </div>
+    <div class="menu" id="m-help" hidden>
+      <button type="button" data-cmd="howto"><u>К</u>ак искать</button>
+      <hr>
+      <button type="button" data-cmd="about"><u>О</u> программе</button>
+    </div>
+    <div class="menu start-menu" id="m-start" hidden>
+      <div class="start-banner"><span><b>Задачник</b>98</span></div>
+      <div class="start-items">
+        <button type="button" data-cmd="list"><svg viewBox="0 0 16 16"><use href="#i-folder"/></svg><span><u>З</u>адачи</span></button>
+        <button type="button" data-cmd="find"><svg viewBox="0 0 16 16"><use href="#i-doc"/></svg><span><u>Н</u>айти…</span></button>
+        <button type="button" data-cmd="howto"><svg viewBox="0 0 32 32"><use href="#i-info"/></svg><span><u>С</u>правка</span></button>
+        <hr>
+        <button type="button" data-cmd="about"><svg viewBox="0 0 16 16"><use href="#i-app"/></svg><span><u>О</u> программе…</span></button>
+      </div>
+    </div>
+
+    <!-- Окно-сообщение -->
+    <div class="modal" id="dialog" hidden>
+      <div class="window dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title">
+        <div class="title-bar">
+          <div class="title-bar-text" id="dlg-title"></div>
+          <div class="title-bar-controls"><button type="button" data-act="dlg-close" aria-label="Закрыть"></button></div>
+        </div>
+        <div class="dlg-body">
+          <svg class="dlg-icon" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-info"/></svg>
+          <div class="dlg-text" id="dlg-text"></div>
+        </div>
+        <div class="dlg-btns"><button class="btn default" type="button" data-act="dlg-close">OK</button></div>
+      </div>
+    </div>
+
+    <!-- Панель задач -->
+    <footer id="taskbar">
+      <button class="btn start" id="start" type="button" data-menu="m-start">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-app"/></svg><b>Пуск</b>
+      </button>
+      <div class="tasks" id="tasks"></div>
+      <div class="tray" id="clock"></div>
+    </footer>
   </div>
 
   <script src="vendor/katex/katex.min.js"></script>

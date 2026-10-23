@@ -1,5 +1,5 @@
 /* Офлайн-кэш. При добавлении задач увеличьте VERSION — телефон подтянет новое. */
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = 'zadachnik-' + VERSION;
 const ASSETS = [
   './',

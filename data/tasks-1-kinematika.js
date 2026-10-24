@@ -140,9 +140,7 @@
     condition: String.raw`Зависимость скорости от времени для движения некоторого тела представлена на рис. 1.4. Определить среднюю путевую скорость $\langle v \rangle$ за время $t = 14$ с.`,
     given: [[String.raw`v(t)\ \text{— рис. 1.4}`, ''], [String.raw`t = 14\ \text{с}`, '']],
     find: String.raw`\langle v \rangle \;—\; ?`,
-    figure: () => FIG.graph({ x: [0, 15.5], y: [-11, 7], xt: [2, 6, 10, 14], yt: [5, -5, -10], xl: 't, с', yl: 'v, м/с',
-      s: [{ pts: [[0, 0], [2, 5], [14, -10]] }], guides: [[2, 5], [14, -10]], dots: [[2, 5], [14, -10]] }),
-    figCaption: 'Рис. 1.4',
+    bookFig: '1.4',
     formulas: [
       { tex: String.raw`s = \int_0^t |v|\,dt`, text: 'путь равен площади под графиком модуля скорости' },
       { tex: String.raw`\langle v \rangle = \frac{s}{t}`, text: 'средняя путевая скорость' },
@@ -166,12 +164,10 @@
     condition: String.raw`Зависимость ускорения от времени при некотором движении тела представлена на рис. 1.5. Определить среднюю путевую скорость $\langle v \rangle$ за время $t = 8$ с. Начальная скорость $v_0 = 0$.`,
     given: [[String.raw`a(t)\ \text{— рис. 1.5}`, ''], [String.raw`t = 8\ \text{с},\ v_0 = 0`, '']],
     find: String.raw`\langle v \rangle \;—\; ?`,
-    figure: () =>
-      FIG.graph({ x: [0, 11], y: [-1.4, 1.4], h: 150, xt: [4, 8, 10], yt: [1, -1], xl: 't, с', yl: 'a, м/с²',
-        s: [{ pts: [[0, 1], [4, 1]] }, { pts: [[4, -1], [10, -1]] }, { pts: [[4, 1], [4, -1]], dash: true }] }) +
-      FIG.graph({ x: [0, 11], y: [-2.5, 5], h: 160, xt: [4, 8, 10], yt: [4, -2], xl: 't, с', yl: 'v, м/с',
-        s: [{ pts: [[0, 0], [4, 4], [10, -2]], blue: true }], guides: [[4, 4]] }),
-    figCaption: 'Рис. 1.5 (вверху) и построенный по нему график v(t)',
+    bookFig: '1.5',
+    figure: () => FIG.graph({ x: [0, 11], y: [-2.5, 5], h: 160, xt: [4, 8, 10], yt: [4, -2], xl: 't, с', yl: 'v, м/с',
+      s: [{ pts: [[0, 0], [4, 4], [10, -2]], blue: true }], guides: [[4, 4]] }),
+    figCaption: 'График v(t), построенный по рис. 1.5',
     formulas: [
       { tex: String.raw`v = v_0 + at`, text: 'скорость при постоянном ускорении на каждом участке' },
       { tex: String.raw`s = \int_0^t |v|\,dt`, text: 'путь — площадь под графиком |v(t)|' },
@@ -222,13 +218,14 @@
     condition: String.raw`На рис. 1.5 дан график зависимости ускорения от времени для некоторого движения тела. Построить графики зависимости скорости и пути от времени для этого движения, если в начальный момент тело покоилось.`,
     given: [[String.raw`a(t)\ \text{— рис. 1.5}`, ''], [String.raw`v_0 = 0`, '']],
     find: String.raw`v(t),\ s(t)\ \text{— графики}`,
+    bookFig: '1.5',
     figure: () =>
       FIG.graph({ x: [0, 11], y: [-2.5, 5], h: 160, xt: [4, 8, 10], yt: [4, -2], xl: 't, с', yl: 'v, м/с',
         s: [{ pts: [[0, 0], [4, 4], [10, -2]] }], guides: [[4, 4]] }) +
       FIG.graph({ x: [0, 11], y: [0, 20], h: 170, xt: [4, 8, 10], yt: [8, 16], xl: 't, с', yl: 's, м',
         s: [{ f: t => (t <= 4 ? t * t / 2 : t <= 8 ? 8 + 4 * (t - 4) - (t - 4) ** 2 / 2 : 16 + (t - 8) ** 2 / 2), t: [0, 10] }],
         guides: [[4, 8], [8, 16]], dots: [[4, 8], [8, 16]] }),
-    figCaption: 'Вверху v(t), внизу s(t)',
+    figCaption: 'Построенные графики: вверху v(t), внизу s(t)',
     formulas: [
       { tex: String.raw`v = v_0 + at,\qquad s = v_0t + \frac{at^2}{2}`, text: 'равноускоренное движение на каждом участке' },
     ],
@@ -287,8 +284,7 @@
     condition: String.raw`Написать кинематическое уравнение движения $x = f(t)$ точки для четырёх случаев, представленных на рис. 1.6. На каждой позиции рисунка — а, б, в, г — изображена координатная ось $Ox$, указаны начальное положение $x_0$ и скорость $\mathbf{v}_0$ материальной точки $A$, а также её ускорение $\mathbf{a}$.`,
     given: [[String.raw`x_0,\ v_0,\ a\ \text{— модули, рис. 1.6}`, '']],
     find: String.raw`x = f(t) \;—\; ?`,
-    figure: () => FIG.axes4(),
-    figCaption: 'Рис. 1.6',
+    bookFig: '1.6',
     formulas: [{ tex: String.raw`x = x_{0x} + v_{0x}t + \frac{a_xt^2}{2}`, text: 'равноускоренное движение; в формулу входят проекции, а не модули' }],
     steps: [
       { title: 'Правило знаков',
@@ -312,8 +308,7 @@
     condition: String.raw`Прожектор $O$ (рис. 1.7) установлен на расстоянии $l = 100$ м от стены $AB$ и бросает светлое пятно на эту стену. Прожектор вращается вокруг вертикальной оси, делая один оборот за время $T = 20$ с. Найти: 1) уравнение движения светлого пятна по стене в течение первой четверти оборота; 2) скорость $v$, с которой светлое пятно движется по стене, в момент времени $t = 2$ с. За начало отсчёта принять момент, когда направление луча совпадает с $OC$.`,
     given: [[String.raw`l = 100\ \text{м}`, ''], [String.raw`T = 20\ \text{с}`, ''], [String.raw`t = 2\ \text{с}`, '']],
     find: String.raw`x(t),\ v \;—\; ?`,
-    figure: () => FIG.projector(),
-    figCaption: 'Рис. 1.7 (вид сверху)',
+    bookFig: '1.7',
     formulas: [
       { tex: String.raw`\varphi = \omega t,\qquad \omega = \frac{2\pi}{T}`, text: 'равномерное вращение луча' },
       { tex: String.raw`x = l\,\operatorname{tg}\varphi`, text: 'из прямоугольного треугольника OC–пятно' },
@@ -381,7 +376,7 @@
       { title: 'Расстояния от старта',
         tex: String.raw`s' = 3{,}39 + 3{,}39^2 \approx 15\ \text{м},\qquad s'' = 10{,}61 + 10{,}61^2 \approx 123\ \text{м}` },
     ],
-    answer: [String.raw`t' \approx 3{,}4\ \text{с},\ s' \approx 15\ \text{м}`, String.raw`t'' \approx 10{,}6\ \text{с},\ s'' \approx 123\ \text{м}\ \ (\text{время от старта первой точки})`],
+    answer: [String.raw`t' \approx 3{,}4\ \text{с},\ s' \approx 15\ \text{м}`, String.raw`t'' \approx 10{,}6\ \text{с},\ s'' \approx 123\ \text{м}`, String.raw`(\text{время — от старта первой точки})`],
   },
 
   /* ===================== 1.15 ===================== */
@@ -695,7 +690,7 @@
       { title: 'Нормальное ускорение',
         tex: String.raw`a_n = \sqrt{10^2 - 7{,}07^2} \approx 7{,}07\ \text{м/с}^2` },
     ],
-    answer: [String.raw`\mathbf{v} = -10t\,\mathbf{i} + 10\,\mathbf{j};\quad \mathbf{a} = -10\,\mathbf{i}`, String.raw`|\mathbf{v}| \approx 14{,}1\ \text{м/с};\ |\mathbf{a}| = 10\ \text{м/с}^2;\ a_\tau = a_n \approx 7{,}07\ \text{м/с}^2`],
+    answer: [String.raw`\mathbf{v} = -10t\,\mathbf{i} + 10\,\mathbf{j};\quad \mathbf{a} = -10\,\mathbf{i}`, String.raw`|\mathbf{v}| \approx 14{,}1\ \text{м/с};\quad |\mathbf{a}| = 10\ \text{м/с}^2;\quad a_\tau = a_n \approx 7{,}07\ \text{м/с}^2`],
   },
 
   /* ===================== 1.29 ===================== */
@@ -727,7 +722,7 @@
     figure: () => FIG.arcChord(114.6),
     figCaption: 'Дуга s и хорда Δr, α = s/R = 2 рад',
     formulas: [
-      { tex: String.raw`s = v_0t + \frac{a_\tau t^2}{2}`, text: 'путь вдоль траектории при постоянном a_τ' },
+      { tex: String.raw`s = v_0t + \frac{a_\tau t^2}{2}`, text: String.raw`путь вдоль траектории при постоянном $a_\tau$` },
       { tex: String.raw`|\Delta\mathbf{r}| = 2R\sin\frac{\alpha}{2},\quad \alpha = \frac sR`, text: 'длина хорды (пример 3)' },
     ],
     steps: [
@@ -822,7 +817,7 @@
     figure: () => FIG.accel(78, 45, true),
     formulas: [
       { tex: String.raw`a_n = \frac{v^2}{R}`, text: 'нормальное ускорение' },
-      { tex: String.raw`\operatorname{tg}\varphi = \frac{a_\tau}{a_n}`, text: 'a_τ ⊥ a_n, φ — угол между a и a_n' },
+      { tex: String.raw`\operatorname{tg}\varphi = \frac{a_\tau}{a_n}`, text: String.raw`$\mathbf{a}_\tau \perp \mathbf{a}_n$, $\varphi$ — угол между $\mathbf{a}$ и $\mathbf{a}_n$` },
     ],
     steps: [
       { title: 'Скорость',
@@ -889,8 +884,7 @@
     note: MISMATCH + String.raw`В книге ответ $x(t) = \cos\left(\frac{\pi}{2} - \frac vR t\right)$ — без множителя $R$. Это опечатка: координата измеряется в метрах, косинус безразмерен.`,
     given: [[String.raw`v,\ R`, ''], [String.raw`A(0;\,R)\ \text{при}\ t = 0`, '']],
     find: String.raw`x(t) \;—\; ?`,
-    figure: () => FIG.circleTop(),
-    figCaption: 'Рис. 1.8: движение по часовой стрелке',
+    bookFig: '1.8',
     formulas: [
       { tex: String.raw`\omega = \frac vR,\qquad \varphi = \varphi_0 - \omega t`, text: 'равномерное вращение; по часовой стрелке угол от оси x убывает' },
       { tex: String.raw`x = R\cos\varphi`, text: 'проекция на ось x' },
@@ -913,8 +907,7 @@
     note: MISMATCH + String.raw`В книге напечатано «$y = Rt\cos(vt/R)$, $x = Rt\sin(vt/R)$». Множитель $t$ лишний — опечатка: точка остаётся на окружности радиусом $R$.`,
     given: [[String.raw`v,\ R`, ''], [String.raw`A(0;\,R)\ \text{при}\ t = 0`, '']],
     find: String.raw`x(t),\ y(t);\ r(t),\ \varphi(t) \;—\; ?`,
-    figure: () => FIG.circleTop(),
-    figCaption: 'Рис. 1.8',
+    bookFig: '1.8',
     formulas: [{ tex: String.raw`x = R\cos\varphi,\quad y = R\sin\varphi,\quad \varphi = \frac\pi2 - \frac vR\,t`, text: 'координаты точки на окружности; движение по часовой стрелке' }],
     steps: [
       { title: 'Декартовы координаты',
@@ -934,8 +927,7 @@
     condition: String.raw`Написать для четырёх случаев, представленных на рис. 1.9: 1) кинематические уравнения движения $x = f_1(t)$ и $y = f_2(t)$; 2) уравнение траектории $y = \varphi(x)$. На каждой позиции рисунка — а, б, в, г — изображены координатные оси, указаны начальное положение точки $A$, её начальная скорость $\mathbf{v}_0$ и ускорение $\mathbf{g}$.`,
     given: [[String.raw`h,\ s,\ v_0,\ \alpha,\ g\ \text{— рис. 1.9}`, '']],
     find: String.raw`x(t),\ y(t),\ y(x) \;—\; ?`,
-    figure: () => FIG.throw4(),
-    figCaption: 'Рис. 1.9',
+    bookFig: '1.9',
     formulas: [
       { tex: String.raw`x = x_0 + v_{0x}t,\qquad y = y_0 + v_{0y}t - \frac{gt^2}{2}`, text: 'ускорение g направлено против оси y; по x движение равномерное' },
       { tex: String.raw`t = \frac{x - x_0}{v_{0x}}`, text: 'подставляем во второе уравнение — получаем траекторию' },
@@ -1079,7 +1071,7 @@
       { title: 'Дальность и скорость падения',
         tex: String.raw`s = 25\cdot9{,}67 \approx 242\ \text{м},\qquad v = \sqrt{2500 + 2\cdot9{,}81\cdot40} \approx 57{,}3\ \text{м/с}` },
     ],
-    answer: [String.raw`\tau \approx 9{,}67\ \text{с};\ \ H \approx 136\ \text{м};\ \ s \approx 242\ \text{м};\ \ v \approx 57{,}3\ \text{м/с}`],
+    answer: [String.raw`\tau \approx 9{,}67\ \text{с};\quad H \approx 136\ \text{м};\quad s \approx 242\ \text{м};\quad v \approx 57{,}3\ \text{м/с}`],
   },
 
   /* ===================== 1.46 ===================== */
@@ -1145,7 +1137,7 @@
       { title: 'Скорость',
         tex: String.raw`v_y = 9{,}81\cdot2 = 19{,}6\ \text{м/с},\qquad v = \sqrt{30^2 + 19{,}6^2} \approx 35{,}8\ \text{м/с}` },
       { title: 'Раскладываем g',
-        text: 'Полное ускорение камня — это g. Проекция g на направление скорости даёт a_τ, перпендикулярная составляющая — a_n.',
+        text: String.raw`Полное ускорение камня — это $g$. Проекция $g$ на направление скорости даёт $a_\tau$, перпендикулярная составляющая — $a_n$.`,
         tex: String.raw`a_\tau = 9{,}81\cdot\frac{19{,}6}{35{,}8} \approx 5{,}37\ \text{м/с}^2,\qquad a_n = 9{,}81\cdot\frac{30}{35{,}8} \approx 8{,}21\ \text{м/с}^2` },
     ],
     answer: [String.raw`v \approx 35{,}8\ \text{м/с};\quad a_\tau \approx 5{,}37\ \text{м/с}^2;\quad a_n \approx 8{,}21\ \text{м/с}^2`],

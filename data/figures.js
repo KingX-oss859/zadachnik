@@ -22,65 +22,6 @@ window.FIG = (function () {
       arrowDefs.replace(/id="(arb?)"/g, `id="$1-${k}"`) + body.replace(/url\(#(arb?)\)/g, `url(#$1-${k})`) + '</svg>';
   };
 
-  /* ---------- 3.11 проволочный треугольник ---------- */
-  function triangle() {
-    const a = 110, h = a * Math.sqrt(3) / 2;
-    // а) вершина вверху, ось через вершину параллельно основанию
-    const ax = 30, ay = 40;
-    const A = [ax + a / 2, ay], B = [ax, ay + h], C = [ax + a, ay + h];
-    // б) перевёрнутый, ось по верхней стороне
-    const bx = 200, by = 40;
-    const D = [bx, by], E = [bx + a, by], F = [bx + a / 2, by + h];
-    return svg(340, 210, `
-      <line x1="${ax - 18}" y1="${ay}" x2="${ax + a + 18}" y2="${ay}" class="ax"/>
-      ${T(ax - 20, ay - 8, 'O')}${T(ax + a + 8, ay - 8, 'O′')}
-      <polygon points="${A} ${B} ${C}" class="ln wire"/>
-      ${dim(B[0], B[1] + 16, C[0], C[1] + 16)}${T(ax + a / 2 - 4, B[1] + 34, 'a', 'tx it')}
-      ${T(ax + a / 2 - 4, 202, 'а)', 'tx cap')}
-      <line x1="${bx - 18}" y1="${by}" x2="${bx + a + 18}" y2="${by}" class="ax"/>
-      ${T(bx - 20, by - 8, 'O')}${T(bx + a + 8, by - 8, 'O′')}
-      <polygon points="${D} ${E} ${F}" class="ln wire"/>
-      ${T(bx + a / 2 - 4, by + 18, 'a', 'tx it')}
-      ${T(bx + a / 2 - 4, 202, 'б)', 'tx cap')}
-    `);
-  }
-
-  /* ---------- 3.12 стержень с шариками, 5 случаев ---------- */
-  function rods(only) {
-    const cases = [
-      { k: 'а', f: 0, lab: '' },
-      { k: 'б', f: 1 / 3, lab: 'l/3', from: 'top' },
-      { k: 'в', f: 1 / 2, lab: 'l/2', from: 'top' },
-      { k: 'г', f: 2 / 3, lab: 'l/3', from: 'bot' },
-      { k: 'д', f: 3 / 4, lab: 'l/4', from: 'bot' },
-    ];
-    const list = only ? cases.filter(c => c.k === only) : cases;
-    const step = 68, top = 34, len = 190, W = list.length * step + 20;
-    let body = '';
-    list.forEach((c, i) => {
-      const x = 36 + i * step, yO = top + len * c.f, yb = top + len;
-      body += `
-        <line x1="${x}" y1="${top}" x2="${x}" y2="${yb}" class="ln rod"/>
-        <circle cx="${x}" cy="${top}" r="6" class="ln ball"/>
-        <circle cx="${x}" cy="${yb}" r="9" class="ln ball"/>
-        ${T(x - 5, top - 13, 'm', 'tx it')}
-        ${T(x - 11, yb + 26, '2m', 'tx it')}
-        <circle cx="${x}" cy="${yO}" r="3.6" class="pt"/>
-        ${T(x - 20, yO + 5, 'O', 'tx ax-t')}
-        ${T(x - 4, yb + 48, c.k + ')', 'tx cap')}`;
-      if (c.from === 'top') {
-        body += dim(x + 16, top, x + 16, yO) + T(x + 20, (top + yO) / 2 + 4, c.lab, 'tx it sm');
-      } else if (c.from === 'bot') {
-        body += dim(x + 16, yO, x + 16, yb) + T(x + 20, (yO + yb) / 2 + 4, c.lab, 'tx it sm');
-      } else {
-        body += dim(x + 16, top, x + 16, yb) + T(x + 20, (top + yb) / 2 + 4, 'l', 'tx it sm');
-      }
-    });
-    body = `<line x1="10" y1="${top}" x2="${W - 6}" y2="${top}" class="guide"/>
-            <line x1="10" y1="${top + len}" x2="${W - 6}" y2="${top + len}" class="guide"/>` + body;
-    return svg(W, 290, body);
-  }
-
   /* ---------- 3.13 кольцо, ось в плоскости через центр ---------- */
   function ringInPlane() {
     return svg(300, 200, `
@@ -122,21 +63,6 @@ window.FIG = (function () {
     `);
   }
 
-  /* ---------- 3.16 диск с отверстием ---------- */
-  function diskHole() {
-    const cx = 140, cy = 112, r = 90, l = 45, rh = 30;
-    return svg(300, 230, `
-      <circle cx="${cx}" cy="${cy}" r="${r}" class="ln disk"/>
-      <circle cx="${cx}" cy="${cy - l}" r="${rh}" class="ln hole"/>
-      <circle cx="${cx}" cy="${cy}" r="3" class="pt"/>${T(cx - 20, cy + 5, 'O', 'tx ax-t')}
-      <circle cx="${cx}" cy="${cy - l}" r="3" class="pt"/>${T(cx - 22, cy - l + 5, 'O₁')}
-      ${dim(cx + 40, cy - l, cx + 40, cy)}${T(cx + 46, cy - l / 2 + 4, 'l', 'tx it')}
-      ${dim(cx - rh, cy - l - rh - 10, cx + rh, cy - l - rh - 10)}${T(cx - 4, cy - l - rh - 16, 'd', 'tx it')}
-      <line x1="${cx}" y1="${cy}" x2="${cx + r * 0.7}" y2="${cy + r * 0.7}" class="dim" marker-end="url(#ar)"/>
-      ${T(cx + 34, cy + 46, 'r', 'tx it')}
-    `);
-  }
-
   /* ---------- 3.17 прямоугольная пластина ---------- */
   function plate() {
     return svg(300, 200, `
@@ -160,7 +86,8 @@ window.FIG = (function () {
   /* ---------- график по точкам или функции ----------
      o = { x:[x0,x1], y:[y0,y1], xt:[деления], yt:[деления], xl:'t, с', yl:'v, м/с',
            s:[{ f, t:[от,до], param, pts, dash, blue, label:[x,y,'текст',доп] }],
-           guides:[[x,y]] — пунктир от точки к осям, dots:[[x,y]], txt:[[x,y,'текст',cls,доп]] } */
+           guides:[[x,y]] — пунктир от точки к осям, dots:[[x,y]], txt:[[x,y,'текст',cls,доп]],
+           arrows:[[x1,y1,x2,y2,blue]] — стрелка (вектор амплитуды, направление движения) } */
   function graph(o) {
     const W = o.w || 320, H = o.h || 190, L = 44, R = 22, Tp = 24, B = 26;
     const [x0, x1] = o.x, [y0, y1] = o.y;
@@ -192,6 +119,9 @@ window.FIG = (function () {
       b += `<polyline points="${pts.map(([px, py]) => X(px) + ',' + Y(py)).join(' ')}" class="crv${s.dash ? ' dash' : ''}${s.blue ? ' blue' : ''}"/>`;
       if (s.label) b += T(X(s.label[0]), Y(s.label[1]), s.label[2], 'tx sm' + (s.blue ? ' ax-t' : ''), s.label[3] || '');
     });
+    (o.arrows || []).forEach(([ax, ay, bx, by, blue]) => {
+      b += `<line x1="${X(ax)}" y1="${Y(ay)}" x2="${X(bx)}" y2="${Y(by)}" class="vec${blue ? ' blue' : ''}" marker-end="url(#${blue ? 'arb' : 'ar'})"/>`;
+    });
     (o.dots || []).forEach(([px, py]) => { b += `<circle cx="${X(px)}" cy="${Y(py)}" r="3" class="pt"/>`; });
     (o.txt || []).forEach(([px, py, s, cls, ex]) => { b += T(X(px), Y(py), s, cls || 'tx sm', ex || ''); });
     return svg(W, H, b);
@@ -215,85 +145,6 @@ window.FIG = (function () {
         ${T(ox - 6, 196, cap, 'tx cap')}`;
     };
     return svg(340, 205, one(85, 1, '60°', 'а)') + one(255, -1, '120°', 'б)'));
-  }
-
-  /* ---------- 1.11 (рис. 1.6) четыре оси ---------- */
-  function axes4() {
-    const rows = [
-      { k: 'а', A: 70, v: 1, a: 1 }, { k: 'б', A: -70, v: -1, a: 1 },
-      { k: 'в', A: 70, v: -1, a: -1 }, { k: 'г', A: -70, v: 1, a: -1 },
-    ];
-    let b = '';
-    rows.forEach((r, i) => {
-      const y = 44 + i * 62, O = 160, A = O + r.A;
-      b += `<line x1="22" y1="${y}" x2="306" y2="${y}" class="axis" marker-end="url(#ar)"/>${T(300, y + 18, 'x', 'tx it sm')}
-        <line x1="${O}" y1="${y - 5}" x2="${O}" y2="${y + 5}" class="axis"/>${T(O - 4, y + 34, 'O', 'tx sm')}
-        ${P(A, y)}${T(A - 4, y + 34, 'A', 'tx sm')}
-        ${dim(Math.min(O, A), y + 14, Math.max(O, A), y + 14)}${T((O + A) / 2 - 6, y + 28, 'x₀', 'tx it sm')}
-        ${arrow(A, y - 10, A + 38 * r.v, y - 10)}${T(A + 38 * r.v + (r.v > 0 ? 4 : -22), y - 6, 'v₀', 'tx it sm')}
-        ${arrow(A, y - 24, A + 30 * r.a, y - 24, 'vec blue')}${T(A + 30 * r.a + (r.a > 0 ? 4 : -14), y - 20, 'a', 'tx it sm ax-t')}
-        ${T(4, y + 4, r.k + ')', 'tx cap')}`;
-    });
-    return svg(320, 270, b);
-  }
-
-  /* ---------- 1.12 (рис. 1.7) прожектор ---------- */
-  function projector() {
-    let hatch = '';
-    for (let x = 24; x <= 296; x += 12) hatch += `<line x1="${x}" y1="30" x2="${x + 8}" y2="20" class="dim"/>`;
-    return svg(320, 200, `
-      <line x1="20" y1="30" x2="300" y2="30" class="ln"/>${hatch}
-      ${T(14, 50, 'A', 'tx sm')}${T(292, 50, 'B', 'tx sm')}${T(108, 48, 'C', 'tx sm')}
-      <line x1="120" y1="30" x2="120" y2="170" class="guide"/>
-      <path d="M 108 172 A 12 12 0 0 1 132 172 Z" class="ln" fill="var(--fill)"/>${T(126, 192, 'O', 'tx sm')}
-      <line x1="120" y1="170" x2="210" y2="30" class="ln"/>${P(210, 30)}
-      <path d="M 120 135 A 35 35 0 0 1 139 140.6" class="dim"/>${T(128, 128, 'φ', 'tx it sm')}
-      ${dim(64, 30, 64, 170)}${T(48, 104, 'l', 'tx it')}
-      ${dim(120, 42, 210, 42)}${T(160, 58, 'x', 'tx it sm')}`);
-  }
-
-  /* ---------- 1.37, 1.38 (рис. 1.8) точка вверху окружности ---------- */
-  function circleTop() {
-    return svg(300, 210, `
-      <line x1="40" y1="110" x2="270" y2="110" class="axis" marker-end="url(#ar)"/>${T(262, 128, 'x', 'tx it sm')}
-      <line x1="150" y1="196" x2="150" y2="8" class="axis" marker-end="url(#ar)"/>${T(158, 16, 'y', 'tx it sm')}
-      <circle cx="150" cy="110" r="72" class="ln" fill="none"/>
-      ${P(150, 110)}${T(134, 128, 'O', 'tx sm')}
-      <line x1="150" y1="110" x2="99" y2="59" class="dim"/>${T(104, 92, 'R', 'tx it')}
-      ${P(150, 38)}${T(132, 32, 'A', 'tx sm')}
-      ${arrow(150, 38, 205, 38)}${T(196, 30, 'v', 'tx it')}
-      <path d="M 214 76 A 72 72 0 0 1 222 110" class="dim" marker-end="url(#ar)"/>`);
-  }
-
-  /* ---------- 1.39 (рис. 1.9) четыре схемы бросания ---------- */
-  function throw4() {
-    const cell = (ox, oy, top, ang, cap) => {
-      const al = ang ? 35 : 0, rad = al * Math.PI / 180;
-      let b = '';
-      if (top) {           // O вверху, A под O на глубине h
-        const Ay = oy + 58;
-        b += `<line x1="${ox}" y1="${oy}" x2="${ox + 130}" y2="${oy}" class="axis" marker-end="url(#ar)"/>${T(ox + 124, oy - 6, 'x', 'tx it sm')}
-          <line x1="${ox}" y1="${oy + 90}" x2="${ox}" y2="${oy - 18}" class="axis" marker-end="url(#ar)"/>${T(ox + 6, oy - 10, 'y', 'tx it sm')}
-          ${T(ox - 14, oy - 4, 'O', 'tx sm')}${P(ox, Ay)}${T(ox - 16, Ay + 4, 'A', 'tx sm')}
-          ${dim(ox + 10, oy, ox + 10, Ay)}${T(ox + 14, oy + 33, 'h', 'tx it sm')}`;
-        const sgn = ang === 'up' ? -1 : 1;
-        b += arrow(ox, Ay, ox + 40 * Math.cos(rad), Ay + sgn * 40 * Math.sin(rad)) + T(ox + 44, Ay + (ang ? -18 : 4), 'v₀', 'tx it sm');
-        if (ang) b += T(ox + 24, Ay - 2, 'α', 'tx it sm');
-      } else {             // O внизу, A в (s; h)
-        const Ax = ox + 55, Ay = oy - 62;
-        b += `<line x1="${ox}" y1="${oy}" x2="${ox + 130}" y2="${oy}" class="axis" marker-end="url(#ar)"/>${T(ox + 124, oy - 6, 'x', 'tx it sm')}
-          <line x1="${ox}" y1="${oy}" x2="${ox}" y2="${oy - 92}" class="axis" marker-end="url(#ar)"/>${T(ox + 6, oy - 84, 'y', 'tx it sm')}
-          ${T(ox - 14, oy + 14, 'O', 'tx sm')}${P(Ax, Ay)}${T(Ax - 6, Ay - 8, 'A', 'tx sm')}
-          <polyline points="${ox},${Ay} ${Ax},${Ay} ${Ax},${oy}" class="guide" fill="none"/>
-          ${T(ox - 12, Ay + 4, 'h', 'tx it sm')}${T(Ax - 3, oy + 15, 's', 'tx it sm')}`;
-        b += arrow(Ax, Ay, Ax + 40 * Math.cos(rad), Ay + 40 * Math.sin(rad)) + T(Ax + 42, Ay + (ang ? 30 : 4), 'v₀', 'tx it sm');
-        if (ang) b += T(Ax + 24, Ay + 10, 'α', 'tx it sm');
-      }
-      b += arrow(ox + 118, oy + (top ? 30 : -70), ox + 118, oy + (top ? 62 : -38), 'vec blue') + T(ox + 124, oy + (top ? 52 : -46), 'g', 'tx it sm ax-t');
-      return b + T(ox - 10, oy + (top ? 112 : 34), cap, 'tx cap');
-    };
-    return svg(330, 290, cell(26, 24, true, 0, 'а)') + cell(186, 24, true, 'up', 'б)') +
-      cell(26, 248, false, 0, 'в)') + cell(186, 248, false, 'down', 'г)'));
   }
 
   /* ---------- дуга s и хорда Δr (1.30, 1.32) ---------- */
@@ -360,6 +211,169 @@ window.FIG = (function () {
       ${P(px, py)}`);
   }
 
-  return { triangle, rods, ringInPlane, ringTangent, diskHalfR, diskHole, plate,
-    graph, roads, axes4, projector, circleTop, throw4, arcChord, accel, gSplit, vec2 };
+  /* ================= § 2. Динамика ================= */
+  const hatch = (x1, x2, y, up) => {   // штриховка опоры под линией (или над ней)
+    let s = `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" class="ln"/>`;
+    for (let x = x1 + 4; x <= x2; x += 10) s += `<line x1="${x}" y1="${y}" x2="${x - 7}" y2="${y + (up ? -7 : 7)}" class="dim"/>`;
+    return s;
+  };
+  const box = (x, y, w, h, lab, cls = 'ln') =>
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" class="${cls}" style="fill:var(--fill)"/>` +
+    (lab ? T(x + w / 2, y + h / 2 + 5, lab, 'tx it sm', 'text-anchor="middle"') : '');
+
+  /* ---------- брусок на столе и блок(и) на краю (2.2, 2.5) ---------- */
+  function tablePulley(two) {
+    if (!two) return svg(300, 190, `
+      <rect x="20" y="80" width="214" height="10" class="ln" style="fill:var(--fill)"/>
+      <line x1="30" y1="90" x2="30" y2="180" class="ln"/><line x1="220" y1="90" x2="220" y2="180" class="ln"/>
+      ${box(100, 50, 64, 30, 'm₁')}
+      <line x1="164" y1="65" x2="240" y2="65" class="ln"/>
+      <circle cx="240" cy="73" r="8" class="ln" style="fill:var(--card)"/><line x1="234" y1="80" x2="226" y2="88" class="ln"/>
+      <line x1="248" y1="73" x2="248" y2="128" class="ln"/>${box(236, 128, 24, 30, 'm₂')}
+      ${arrow(110, 40, 150, 40)}${T(152, 44, 'a', 'tx it sm')}${arrow(272, 132, 272, 166)}${T(278, 154, 'a', 'tx it sm')}
+      ${T(198, 58, 'T', 'tx it sm')}${T(254, 112, 'T', 'tx it sm')}`);
+    return svg(320, 190, `
+      <rect x="44" y="80" width="232" height="10" class="ln" style="fill:var(--fill)"/>
+      <line x1="56" y1="90" x2="56" y2="180" class="ln"/><line x1="264" y1="90" x2="264" y2="180" class="ln"/>
+      ${box(130, 50, 60, 30, 'm')}
+      <line x1="40" y1="65" x2="130" y2="65" class="ln"/><line x1="190" y1="65" x2="280" y2="65" class="ln"/>
+      <circle cx="40" cy="73" r="8" class="ln" style="fill:var(--card)"/><circle cx="280" cy="73" r="8" class="ln" style="fill:var(--card)"/>
+      <line x1="32" y1="73" x2="32" y2="130" class="ln"/>${box(22, 130, 20, 24, 'm₁')}
+      <line x1="288" y1="73" x2="288" y2="120" class="ln"/>${box(276, 120, 24, 34, 'm₂')}
+      ${arrow(140, 40, 180, 40)}${T(182, 44, 'a', 'tx it sm')}
+      ${T(80, 58, 'T₁', 'tx it sm')}${T(228, 58, 'T₂', 'tx it sm')}`);
+  }
+
+  /* ---------- блок на пружинных весах (2.3) ---------- */
+  function atwood() {
+    return svg(240, 230, `
+      ${hatch(60, 180, 12, true)}
+      <line x1="120" y1="12" x2="120" y2="24" class="ln"/>
+      <rect x="104" y="24" width="32" height="36" class="ln" style="fill:var(--card)"/>
+      <polyline points="120,28 112,33 128,39 112,45 128,51 120,56" class="dim" fill="none"/>
+      ${T(142, 46, 'весы', 'tx sm mut')}
+      <line x1="120" y1="60" x2="120" y2="84" class="ln"/>
+      <circle cx="120" cy="100" r="18" class="ln" style="fill:var(--card)"/><circle cx="120" cy="100" r="2.5" class="pt"/>
+      <line x1="102" y1="100" x2="102" y2="168" class="ln"/>${box(90, 168, 24, 24, 'm₁')}
+      <line x1="138" y1="100" x2="138" y2="128" class="ln"/>${box(124, 128, 28, 34, 'm₂')}
+      ${arrow(72, 186, 72, 156)}${T(60, 176, 'a', 'tx it sm')}${arrow(172, 132, 172, 162)}${T(178, 152, 'a', 'tx it sm')}
+      ${T(84, 140, 'T', 'tx it sm')}${T(144, 120, 'T', 'tx it sm')}`);
+  }
+
+  /* ---------- брусок на наклонной плоскости (2.6) ---------- */
+  function incline(deg) {
+    const a = deg * Math.PI / 180, tg = Math.tan(a), x0 = 30, x1 = 280, yb = 165, yt = +(yb - (x1 - x0) * tg).toFixed(1);
+    const px = 150, py = +(yt + (px - x0) * tg).toFixed(1);
+    const n = [Math.sin(a), -Math.cos(a)], d = [Math.cos(a), Math.sin(a)];
+    const cx = +(px + 13 * n[0]).toFixed(1), cy = +(py + 13 * n[1]).toFixed(1);
+    const e = (vx, vy, L) => [+(cx + vx * L).toFixed(1), +(cy + vy * L).toFixed(1)];
+    const [nx, ny] = e(n[0], n[1], 52), [fx, fy] = e(-d[0], -d[1], 36), [vx, vy] = e(d[0], d[1], 48);
+    return svg(300, 185, `
+      <polygon points="${x0},${yt} ${x0},${yb} ${x1},${yb}" class="ln" style="fill:var(--fill)"/>
+      <rect x="-22" y="-13" width="44" height="26" class="ln" style="fill:var(--card)" transform="translate(${cx},${cy}) rotate(${deg})"/>
+      ${arrow(cx, cy, cx, cy + 58, 'vec blue')}${T(cx + 4, cy + 60, 'mg', 'tx it sm ax-t')}
+      ${arrow(cx, cy, nx, ny)}${T(nx + 4, ny, 'N', 'tx it sm')}
+      ${arrow(cx, cy, fx, fy)}${T(fx - 26, fy - 2, 'F', 'tx it sm')}${T(fx - 16, fy + 2, 'тр', 'tx sm')}
+      <line x1="${cx}" y1="${cy}" x2="${vx}" y2="${vy}" class="guide" marker-end="url(#ar)"/>${T(vx - 6, vy + 16, 'a', 'tx it sm')}
+      <path d="M ${x1 - 40} ${yb} A 40 40 0 0 0 ${+(x1 - 40 * Math.cos(a)).toFixed(1)} ${+(yb - 40 * Math.sin(a)).toFixed(1)}" class="dim"/>
+      ${T(x1 - 62, yb - 6, 'α', 'tx it sm')}`);
+  }
+
+  /* ---------- два бруска друг на друге (2.18, 2.19) ---------- */
+  function blocks2(low, up, on, muBetween, muGround) {
+    const fy = on === 'low' ? 125 : 95, fx = on === 'low' ? 230 : 190;
+    return svg(300, 170, `
+      ${hatch(20, 280, 140)}
+      ${box(70, 110, 160, 30, low)}${box(110, 80, 80, 30, up)}
+      ${arrow(fx, fy, fx + 52, fy)}${T(fx + 54, fy + 5, 'F', 'tx it')}
+      ${T(196, 106, muBetween, 'tx it sm')}${muGround ? T(236, 156, muGround, 'tx it sm') : T(24, 160, 'без трения', 'tx sm mut')}`);
+  }
+
+  /* ---------- цистерна с жидкостью при разгоне (2.23, 2.24) ---------- */
+  function tank() {
+    // разгон вперёд (вправо): жидкость поднимается у заднего (левого) края
+    const tilt = 10 * Math.PI / 180, cx = 150, cy = 100, k = Math.tan(tilt);
+    const yl = +(cy - 110 * k).toFixed(1), yr = +(cy + 110 * k).toFixed(1);
+    return svg(320, 185, `
+      <rect x="40" y="50" width="220" height="100" rx="14" class="ln" fill="none"/>
+      <path d="M 40 ${yl} L 260 ${yr} L 260 136 A 14 14 0 0 1 246 150 L 54 150 A 14 14 0 0 1 40 136 Z" class="ln" style="fill:var(--fill)"/>
+      <line x1="40" y1="${cy}" x2="260" y2="${cy}" class="guide"/>
+      <path d="M ${cx + 50} ${cy} A 50 50 0 0 1 ${+(cx + 50 * Math.cos(tilt)).toFixed(1)} ${+(cy + 50 * Math.sin(tilt)).toFixed(1)}" class="dim"/>${T(cx + 54, cy + 18, 'φ', 'tx it sm')}
+      ${arrow(200, 30, 260, 30)}${T(232, 24, 'a', 'tx it')}
+      ${dim(40, 168, 260, 168)}${T(148, 182, 'l', 'tx it sm')}
+      <line x1="40" y1="${yl}" x2="284" y2="${yl}" class="guide"/>
+      ${dim(278, yl, 278, yr)}${T(284, cy + 4, 'Δl', 'tx it sm')}
+      ${T(44, 44, 'зад', 'tx sm mut')}${T(222, 44, 'перёд', 'tx sm mut')}`);
+  }
+
+  /* ---------- конический маятник (2.46, 2.47) ---------- */
+  function conical() {
+    const px = 150, py = 18, L = 120, a = 48 * Math.PI / 180;
+    const bx = +(px + L * Math.sin(a)).toFixed(1), by = +(py + L * Math.cos(a)).toFixed(1);
+    const ux = (px - bx) / L, uy = (py - by) / L;
+    return svg(300, 190, `
+      ${hatch(100, 200, py, true)}
+      <line x1="${px}" y1="${py}" x2="${px}" y2="${by + 30}" class="ax"/>
+      <ellipse cx="${px}" cy="${by}" rx="${bx - px}" ry="16" class="guide" fill="none"/>
+      <line x1="${px}" y1="${py}" x2="${bx}" y2="${by}" class="ln"/>
+      <line x1="${px}" y1="${by}" x2="${bx}" y2="${by}" class="guide"/>${T((px + bx) / 2 - 4, by - 6, 'r', 'tx it sm')}
+      <circle cx="${bx}" cy="${by}" r="7" class="ln ball"/>
+      ${T(px + 38, py + 56, 'l', 'tx it sm')}
+      <path d="M ${px} ${py + 30} A 30 30 0 0 0 ${+(px + 30 * Math.sin(a)).toFixed(1)} ${+(py + 30 * Math.cos(a)).toFixed(1)}" class="dim"/>${T(px + 6, py + 48, 'φ', 'tx it sm')}
+      ${arrow(bx, by, +(bx + 52 * ux).toFixed(1), +(by + 52 * uy).toFixed(1))}${T(bx - 22, by - 38, 'T', 'tx it sm')}
+      ${arrow(bx, by, bx, by + 48, 'vec blue')}${T(bx + 6, by + 44, 'mg', 'tx it sm ax-t')}`);
+  }
+
+  /* ---------- наклон велосипедиста на повороте (2.53) ---------- */
+  function lean(deg) {
+    const a = deg * Math.PI / 180, cx = 170, cy = 160, L = 120;
+    const tx = +(cx - L * Math.sin(a)).toFixed(1), ty = +(cy - L * Math.cos(a)).toFixed(1);
+    const mx = +(cx - 0.6 * L * Math.sin(a)).toFixed(1), my = +(cy - 0.6 * L * Math.cos(a)).toFixed(1);
+    const N = 90, F = +(N * Math.tan(a)).toFixed(1);
+    return svg(300, 185, `
+      ${hatch(20, 290, cy)}
+      <line x1="${cx}" y1="${cy}" x2="${tx}" y2="${ty}" class="ln rod"/>
+      <line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy - L}" class="guide"/>
+      <path d="M ${cx} ${cy - 44} A 44 44 0 0 0 ${+(cx - 44 * Math.sin(a)).toFixed(1)} ${+(cy - 44 * Math.cos(a)).toFixed(1)}" class="dim"/>${T(cx - 18, cy - 50, 'φ', 'tx it sm')}
+      <circle cx="${mx}" cy="${my}" r="4" class="pt"/>${T(mx - 18, my - 8, 'C', 'tx sm')}
+      ${arrow(mx, my, mx, my + 50, 'vec blue')}${T(mx - 26, my + 46, 'mg', 'tx it sm ax-t')}
+      ${arrow(cx, cy, cx, cy - N)}${T(cx + 6, cy - N + 8, 'N', 'tx it sm')}
+      ${arrow(cx, cy, cx - F, cy)}${T(cx - F - 4, cy + 18, 'F', 'tx it sm')}${T(cx - F + 6, cy + 22, 'тр', 'tx sm')}
+      ${T(16, 20, '← к центру поворота', 'tx sm mut')}`);
+  }
+
+  /* ---------- вираж самолёта (2.54) ---------- */
+  function bank(deg) {
+    const a = deg * Math.PI / 180, cx = 160, cy = 100, L = 96;
+    const w = [Math.cos(a), -Math.sin(a)], f = [-Math.sin(a), -Math.cos(a)];
+    const p = (v, k) => [+(cx + v[0] * k).toFixed(1), +(cy + v[1] * k).toFixed(1)];
+    const [w1x, w1y] = p(w, -70), [w2x, w2y] = p(w, 70), [fx, fy] = p(f, L);
+    const gy = +(cy + L * Math.cos(a)).toFixed(1), hx = +(cx - L * Math.sin(a)).toFixed(1);
+    return svg(300, 210, `
+      <line x1="${w1x}" y1="${w1y}" x2="${w2x}" y2="${w2y}" class="ln rod"/><circle cx="${cx}" cy="${cy}" r="7" class="ln" style="fill:var(--card)"/>
+      ${arrow(cx, cy, fx, fy)}${T(fx - 4, fy - 6, 'F', 'tx it sm')}
+      ${arrow(cx, cy, cx, gy, 'vec blue')}${T(cx + 6, gy, 'mg', 'tx it sm ax-t')}
+      <line x1="${cx}" y1="${cy}" x2="${hx}" y2="${cy}" class="guide" marker-end="url(#ar)"/>${T(hx - 4, cy + 18, 'ma', 'tx it sm')}${T(hx - 6, cy + 32, 'к центру', 'tx sm mut')}
+      <line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy - 60}" class="guide"/>
+      <path d="M ${cx} ${cy - 40} A 40 40 0 0 0 ${+(cx - 40 * Math.sin(a)).toFixed(1)} ${+(cy - 40 * Math.cos(a)).toFixed(1)}" class="dim"/>${T(cx - 22, cy - 44, 'φ', 'tx it sm')}`);
+  }
+
+  /* ---------- упругое столкновение одинаковых шаров (2.91) ---------- */
+  function collision2(al) {
+    const a = al * Math.PI / 180, cx = 130, cy = 100;
+    const u1 = [+(cx + 100 * Math.cos(a) * Math.cos(a)).toFixed(1), +(cy - 100 * Math.cos(a) * Math.sin(a)).toFixed(1)];
+    const u2 = [+(cx + 100 * Math.sin(a) * Math.sin(a)).toFixed(1), +(cy + 100 * Math.sin(a) * Math.cos(a)).toFixed(1)];
+    return svg(300, 170, `
+      ${arrow(24, cy, cx - 12, cy)}${T(60, cy - 8, 'v₁', 'tx it sm')}
+      <line x1="${cx}" y1="${cy}" x2="${cx + 120}" y2="${cy}" class="guide"/>
+      <circle cx="${cx}" cy="${cy}" r="10" class="ln ball"/>
+      ${arrow(cx, cy, u1[0], u1[1])}${T(u1[0] + 4, u1[1] - 4, 'u₁', 'tx it sm')}
+      ${arrow(cx, cy, u2[0], u2[1], 'vec blue')}${T(u2[0] + 4, u2[1] + 12, 'u₂', 'tx it sm ax-t')}
+      <path d="M ${cx + 44} ${cy} A 44 44 0 0 0 ${+(cx + 44 * Math.cos(a)).toFixed(1)} ${+(cy - 44 * Math.sin(a)).toFixed(1)}" class="dim"/>${T(cx + 50, cy - 8, 'α', 'tx it sm')}
+      <path d="M ${cx + 34} ${cy} A 34 34 0 0 1 ${+(cx + 34 * Math.sin(a)).toFixed(1)} ${+(cy + 34 * Math.cos(a)).toFixed(1)}" class="dim"/>${T(cx + 36, cy + 26, 'β', 'tx it sm')}`);
+  }
+
+  return { ringInPlane, ringTangent, diskHalfR, plate,
+    graph, roads, arcChord, accel, gSplit, vec2,
+    tablePulley, atwood, incline, blocks2, tank, conical, lean, bank, collision2 };
 })();

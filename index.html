@@ -33,6 +33,12 @@
       <path d="M2 6h11v1H2z" fill="#c0c000"/>
       <path d="M2 7h11v6H2z" fill="#ffe680"/>
     </symbol>
+    <symbol id="i-folder-open" viewBox="0 0 16 16" shape-rendering="crispEdges">
+      <path d="M1 3h5l1 1h6v3h-1V5H6L5 4H2v9H1z" fill="#000"/>
+      <path d="M2 4h3l1 1h6v2H2z" fill="#ffff80"/>
+      <path d="M4 7h12l-3 7H1z" fill="#000"/>
+      <path d="M5 8h9l-2 5H3z" fill="#ffe680"/>
+    </symbol>
     <symbol id="i-doc" viewBox="0 0 16 16" shape-rendering="crispEdges">
       <path d="M3 0h7l1 1h1l1 1v1l1 1v12H3z" fill="#000"/>
       <path d="M4 1h6v4h3v10H4z" fill="#fff"/>
@@ -86,6 +92,11 @@
           </div>
           <button id="kb-toggle" class="btn kb-toggle" type="button" aria-label="Переключить клавиатуру">Аа</button>
         </div>
+        <div class="tabs" role="tablist" id="tabs">
+          <button class="tab" type="button" role="tab" data-tab="tasks">Задачи</button>
+          <button class="tab" type="button" role="tab" data-tab="formulas">Основные формулы</button>
+          <button class="tab" type="button" role="tab" data-tab="examples">Примеры решения</button>
+        </div>
         <main class="scroll listview" id="list-scroll">
           <div class="lv-head"><span class="c-num">№</span><span class="c-title">Название</span><span class="c-page">Стр.</span></div>
           <div id="list"></div>
@@ -112,6 +123,7 @@
           <span class="tb-sep"></span>
           <button class="btn" id="tb-prev" type="button">‹ Пред.</button>
           <button class="btn" id="tb-next" type="button">След. ›</button>
+          <button class="btn tb-right" id="tb-formulas" type="button" hidden>Формулы §</button>
         </div>
         <main class="scroll" id="task-scroll">
           <article id="task"></article>
@@ -174,6 +186,17 @@
   <script src="data/figures.js"></script>
   <script src="data/tasks.js"></script>
   <script src="data/tasks-1-kinematika.js"></script>
+  <script src="data/tasks-2-dinamika.js"></script>
+  <script src="data/tasks-3-vrashchenie.js"></script>
+  <script src="data/tasks-6-kolebaniya.js"></script>
+  <script src="data/tasks-8-gazy.js"></script>
+  <script src="data/tasks-10-statfizika.js"></script>
+  <script src="data/tasks-11-termodinamika.js"></script>
+  <script src="data/tasks-12-realgaz.js"></script>
+  <script src="data/tasks-13-kulon.js"></script>
+  <script src="data/tasks-14-napryazhennost.js"></script>
+  <script src="data/theory.js"></script>
+  <script src="data/book-tasks.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

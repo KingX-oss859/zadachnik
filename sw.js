@@ -1,12 +1,25 @@
 /* Офлайн-кэш. При добавлении задач увеличьте VERSION — телефон подтянет новое. */
-const VERSION = 'v3';
+const VERSION = 'v5';
 const CACHE = 'zadachnik-' + VERSION;
+importScripts('sw-assets.js');   // self.FIGURE_ASSETS — картинки книги, список пишет tools/build_theory.py
 const ASSETS = [
   './',
   'app.js',
+  'sw-assets.js',
   'data/figures.js',
   'data/tasks.js',
   'data/tasks-1-kinematika.js',
+  'data/tasks-2-dinamika.js',
+  'data/tasks-3-vrashchenie.js',
+  'data/tasks-6-kolebaniya.js',
+  'data/tasks-8-gazy.js',
+  'data/tasks-10-statfizika.js',
+  'data/tasks-11-termodinamika.js',
+  'data/tasks-12-realgaz.js',
+  'data/tasks-13-kulon.js',
+  'data/tasks-14-napryazhennost.js',
+  'data/theory.js',
+  'data/book-tasks.js',
   'icons/apple-touch-icon.png',
   'icons/icon-192.png',
   'icons/icon-512.png',
@@ -35,7 +48,7 @@ const ASSETS = [
   'vendor/katex/fonts/KaTeX_Typewriter-Regular.woff2',
   'vendor/katex/katex.min.css',
   'vendor/katex/katex.min.js'
-];
+].concat(self.FIGURE_ASSETS || []);
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });

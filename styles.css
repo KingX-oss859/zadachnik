@@ -156,6 +156,67 @@ svg use { pointer-events: none; }
 .clear svg { width: 8px; height: 7px; shape-rendering: crispEdges; }
 .kb-toggle { flex: none; min-width: 44px; font-weight: bold; }
 
+/* ===== Вкладки 98: Задачи / Основные формулы / Примеры решения ===== */
+.tabs { flex: none; display: flex; align-items: flex-end; padding: 0 3px; margin-bottom: -2px; position: relative; z-index: 3; }
+.tab {
+  margin-top: 3px; padding: 4px 9px 3px; white-space: nowrap; background: var(--face);
+  border-radius: 3px 3px 0 0;
+  box-shadow: inset 1px 1px var(--hl), inset 2px 2px var(--hl2), inset -1px 0 var(--dk), inset -2px 0 var(--sh);
+}
+.tab.sel { margin-top: 0; padding: 5px 11px 6px; margin-left: -2px; margin-right: -2px; position: relative; z-index: 2; }
+.tab:first-child.sel { margin-left: 0; }
+.tab:focus-visible { outline: 1px dotted #000; outline-offset: -5px; }
+
+/* ===== Страница книги: «Основные формулы», «Примеры решения» ===== */
+.book {
+  background: #fff; padding: 12px 12px 16px; margin-top: 6px;
+  font-family: "Times New Roman", Times, serif; font-size: 16px; line-height: 1.45; color: #000;
+  -webkit-user-select: text; user-select: text;
+}
+.book p { margin: 0 0 8px; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.book .bk-h { margin: 6px 0 12px; text-align: center; font-size: 15px; font-weight: bold; letter-spacing: .5px; }
+.book .bk-sep { height: 4px; }
+.book .bk-math { overflow-x: auto; overflow-y: hidden; margin: 0 0 8px; padding: 2px 0; }
+.book .bk-math .katex-display { margin: 0; }
+.book p .katex { white-space: nowrap; }
+.book .bk-page { display: flex; align-items: center; gap: 8px; margin: 10px 0; color: var(--sh); font: 11px var(--font); }
+.book .bk-page::before, .book .bk-page::after { content: ""; flex: 1; border-top: 1px dashed var(--fill); }
+.book .bk-foot { margin: 6px 0 10px; font-size: 13px; line-height: 1.35; }
+.book .bk-foot::before { content: ""; display: block; width: 35%; margin-bottom: 4px; border-top: 1px solid #000; }
+.book .bk-quote { margin: 6px 0 10px; padding-left: 10px; border-left: 2px solid var(--fill); }
+.book .bk-table { overflow-x: auto; margin: 6px 0 12px; }
+.book table { border-collapse: collapse; font-size: 13px; line-height: 1.3; }
+.book th, .book td { border: 1px solid #000; padding: 4px 6px; vertical-align: middle; text-align: center; }
+.book th { font-weight: normal; }
+.book .bk-fig { margin: 8px 0 12px; text-align: center; }
+/* рисунки книги — картинки из сканов (figures/*.png, прозрачный фон) */
+.book .bk-fig img, .figure.scan img { display: block; margin: 0 auto; max-width: 100%; max-height: 380px; width: auto; height: auto; }
+.book .bk-fig figcaption { margin-top: 2px; font-size: 14px; }
+/* условие и ответ задачи — дословно из книги (тот же разбор Markdown, шрифт окна задачи) */
+.cond p { margin: 0 0 6px; }
+.cond p:last-child, .cond > :last-child { margin-bottom: 0; }
+.cond .bk-sep { height: 2px; }
+.cond .bk-math { overflow-x: auto; overflow-y: hidden; margin: 2px 0 6px; padding: 2px 0; }
+.cond .bk-math .katex-display { margin: 0; }
+.cond p .katex { white-space: nowrap; }
+.cond .bk-foot { margin: 6px 0 4px; font-size: 12px; line-height: 1.35; }
+.cond .bk-foot::before { content: ""; display: block; width: 35%; margin-bottom: 4px; border-top: 1px solid #000; }
+.cond .bk-quote { margin: 4px 0 6px; padding-left: 8px; border-left: 2px solid var(--fill); }
+.cond .bk-table { overflow-x: auto; margin: 4px 0 8px; }
+.cond table { border-collapse: collapse; font-size: 13px; line-height: 1.3; }
+.cond th, .cond td { border: 1px solid #000; padding: 3px 5px; text-align: center; font-weight: normal; }
+.cond .bk-fig { margin: 8px 0; text-align: center; }
+.cond .bk-fig img { display: block; margin: 0 auto; max-width: 100%; max-height: 380px; }
+.cond .bk-fig figcaption { font-size: 13px; }
+.answer.cond { padding: 8px; font-size: 14px; line-height: 1.5; }
+.book-ans { margin-top: 6px; padding: 6px 8px; font-size: 13px; line-height: 1.45; border-top: 1px dotted var(--sh); }
+.book-ans .ba-h { font-weight: bold; margin-bottom: 2px; }
+.tr-note { color: var(--sh); font-size: 12px; font-style: italic; }
+.figure.scan { padding: 8px 6px; }
+.figure.scan + .fig-cap { margin-bottom: 8px; }
+a.xlink { color: #0000ff; text-decoration: underline; }
+.tb-right { margin-left: auto; }
+
 /* ===== Список задач (ListView) ===== */
 .scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
 .listview { background: #fff; box-shadow: var(--sunken); padding: 2px; }
@@ -175,10 +236,25 @@ svg use { pointer-events: none; }
 .row .num b { font-weight: normal; padding: 0 1px; }
 .row-title { justify-self: start; max-width: 100%; padding: 1px 3px !important; margin-left: 3px; }
 .row .page { color: #000; }
-.group-h { grid-template-columns: auto 1fr; gap: 6px; padding: 0 6px; font-weight: bold; }
+.group-h { display: flex; gap: 6px; padding: 0 6px; font-weight: bold; }
 .group-h span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.group-h.sub { padding-left: 24px; font-weight: normal; }
-.tree .row .num { padding-left: 42px; }
+
+/* дерево как в Проводнике 98: [+]/[−], папка закрыта/открыта, пунктир к вложенным */
+.group-h .gt { flex: 1; min-width: 0; padding: 1px 2px; }
+.group-h .cnt { flex: none; font-weight: normal; color: var(--sh); }
+.group-h.lvl1 { font-weight: normal; }
+.group-h[data-key]:active .gt { background: var(--navy); color: #fff; outline: 1px dotted #fff; outline-offset: -1px; }
+.tw { position: relative; flex: none; width: 11px; height: 11px; border: 1px solid var(--sh); background: #fff; }
+.tw::before { content: ""; position: absolute; left: 2px; right: 2px; top: 4px; height: 1px; background: #000; }
+.group-h.closed .tw::after { content: ""; position: absolute; top: 2px; bottom: 2px; left: 4px; width: 1px; background: #000; }
+.tv-kids { margin-left: 11px; border-left: 1px dotted var(--sh); }
+.tree .tv-kids .row .num { padding-left: 8px; }
+/* колонка «№» уже на величину отступа — «Название» остаётся под заголовком таблицы */
+.tv-kids .row { grid-template-columns: 80px 1fr 52px; }
+.tv-kids .tv-kids .row { grid-template-columns: 68px 1fr 52px; }
+.tv-kids .tv-kids .tv-kids .row { grid-template-columns: 56px 1fr 52px; }
+.group-h.lvl2 { font-weight: normal; }
+.row.stub .num svg { opacity: .45; }          /* задача без разбора: только условие и ответ книги */
 mark { background: var(--navy); color: #fff; padding: 0; }
 .row:active mark { background: #fff; color: var(--navy); }
 
@@ -206,7 +282,8 @@ mark { background: var(--navy); color: #fff; padding: 0; }
   margin: 10px 0 0; padding: 10px 8px 10px; min-width: 0;
   border: 1px solid var(--sh); box-shadow: 1px 1px 0 var(--hl), inset 1px 1px 0 var(--hl);
 }
-.group > legend { padding: 0 3px; margin-left: 2px; }
+/* фон подписи закрывает светлую линию «канавки» (box-shadow рамка не прерывает) */
+.group > legend { padding: 0 4px; margin-left: 4px; background: var(--face); position: relative; }
 .group.ok > legend { font-weight: bold; }
 .group p { margin: 0; }
 .condition { font-size: 14px; line-height: 1.5; }
@@ -225,7 +302,8 @@ mark { background: var(--navy); color: #fff; padding: 0; }
 .given-grid > div:not(.gh) { border-bottom: 1px solid var(--hl2); }
 .given-grid > div:not(.gh):nth-child(odd) { border-right: 1px solid var(--hl2); }
 .find { display: flex; gap: 10px; align-items: center; padding: 8px 2px 0; }
-.find span:first-child { font-weight: bold; }
+.find > span:first-child { font-weight: bold; flex: none; }
+.find > span:last-child { min-width: 0; overflow-x: auto; overflow-y: hidden; }
 
 /* Рисунок */
 .figure { padding: 10px 6px 6px; text-align: center; }

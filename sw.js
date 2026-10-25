@@ -1,5 +1,5 @@
 /* Офлайн-кэш. При добавлении задач увеличьте VERSION — телефон подтянет новое. */
-const VERSION = 'v9';
+const VERSION = 'v10';
 const CACHE = 'zadachnik-' + VERSION;
 importScripts('sw-assets.js');   // self.FIGURE_ASSETS — картинки книги, список пишет tools/build_theory.py
 const ASSETS = [
@@ -16,6 +16,7 @@ const ASSETS = [
   'data/tasks-6-kolebaniya.js',
   'data/tasks-7-volny.js',
   'data/tasks-8-gazy.js',
+  'data/tasks-9-mkt.js',
   'data/tasks-10-statfizika.js',
   'data/tasks-11-termodinamika.js',
   'data/tasks-12-realgaz.js',

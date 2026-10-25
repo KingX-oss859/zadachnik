@@ -91,6 +91,16 @@ self.FIGURE_ASSETS = [
  "figures/fig-3.7.png",
  "figures/fig-3.8.png",
  "figures/fig-3.9.png",
+ "figures/fig-4.1.png",
+ "figures/fig-4.10.png",
+ "figures/fig-4.2.png",
+ "figures/fig-4.3.png",
+ "figures/fig-4.4.png",
+ "figures/fig-4.5.png",
+ "figures/fig-4.6.png",
+ "figures/fig-4.7.png",
+ "figures/fig-4.8.png",
+ "figures/fig-4.9.png",
  "figures/fig-6.1.png",
  "figures/fig-6.10.png",
  "figures/fig-6.2.png",
@@ -125,5 +135,6 @@ self.FIGURE_ASSETS = [
  "figures/fig-ans-14.74.png",
  "figures/fig-ans-14.75.png",
  "figures/fig-ans-14.8.png",
- "figures/fig-ans-14.9.png"
+ "figures/fig-ans-14.9.png",
+ "figures/fig-ans-4.24.png"
 ];

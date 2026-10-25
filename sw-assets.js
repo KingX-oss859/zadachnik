@@ -101,6 +101,8 @@ self.FIGURE_ASSETS = [
  "figures/fig-4.7.png",
  "figures/fig-4.8.png",
  "figures/fig-4.9.png",
+ "figures/fig-5.1.png",
+ "figures/fig-5.2.png",
  "figures/fig-6.1.png",
  "figures/fig-6.10.png",
  "figures/fig-6.2.png",

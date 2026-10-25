@@ -683,7 +683,7 @@
     const bar = $('#conn-bar'), pct = $('#conn-pct'), status = $('#conn-status');
     conn.hidden = false;
     const start = performance.now();
-    const run = connRun = { stop, raf: 0 };
+    const run = connRun = { stop, timer: 0 };
     (function frame() {
       const s = (performance.now() - start) / 1000;
       status.textContent = CONN_STEPS.filter(x => x[0] <= s).pop()[1];
@@ -697,12 +697,13 @@
       bar.style.width = Math.min(w, Math.round(blocks * p / 100) * 10) + 'px';
       pct.textContent = Math.floor(p) + '%';
       if (s >= CONN_END) { endConnect(); unlock(); }
-      else run.raf = requestAnimationFrame(frame);
+      // таймер, а не requestAnimationFrame: в свёрнутом приложении кадры не идут, а таймер дотикает до конца
+      else run.timer = setTimeout(frame, 50);
     })();
   }
   function endConnect() {
     if (!connRun) return;
-    cancelAnimationFrame(connRun.raf);
+    clearTimeout(connRun.timer);
     if (connRun.stop) connRun.stop();
     connRun = null;
     conn.hidden = true;

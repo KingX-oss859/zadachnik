@@ -1,5 +1,5 @@
 /* Офлайн-кэш. При добавлении задач увеличьте VERSION — телефон подтянет новое. */
-const VERSION = 'v5';
+const VERSION = 'v6';
 const CACHE = 'zadachnik-' + VERSION;
 importScripts('sw-assets.js');   // self.FIGURE_ASSETS — картинки книги, список пишет tools/build_theory.py
 const ASSETS = [
@@ -25,6 +25,7 @@ const ASSETS = [
   'icons/icon-512.png',
   'index.html',
   'manifest.webmanifest',
+  'modem.js',
   'styles.css',
   'vendor/katex/fonts/KaTeX_AMS-Regular.woff2',
   'vendor/katex/fonts/KaTeX_Caligraphic-Bold.woff2',

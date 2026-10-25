@@ -103,7 +103,7 @@ svg use { pointer-events: none; }
 .title-bar-controls [data-act="min"] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='7' shape-rendering='crispEdges'%3E%3Cpath d='M0 5h6v2H0z'/%3E%3C/svg%3E"); }
 .title-bar-controls [data-act="max"] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h9v9H0zM1 2v6h7V2z'/%3E%3C/svg%3E"); }
 #desk.maxed .title-bar-controls [data-act="max"] { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h7v6H8V2H3V1H2zM0 3h6v6H0zM1 5v3h4V5z'/%3E%3C/svg%3E"); }
-.title-bar-controls [data-act="close"], .title-bar-controls [data-act="dlg-close"] {
+.title-bar-controls [data-act="close"], .title-bar-controls [data-act="dlg-close"], .title-bar-controls [data-act="login-cancel"] {
   margin-left: 2px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='7' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h2v1h1v1h2V1h1V0h2v1H7v1H6v1H5v1h1v1h1v1h1v1H6V6H5V5H3v1H2v1H0V6h1V5h1V4h1V3H2V2H1V1H0z'/%3E%3C/svg%3E");
 }
@@ -383,8 +383,23 @@ svg .tx.ax-t { fill: var(--blue); font-weight: bold; }
 .dlg-icon { width: 32px; height: 32px; flex: none; }
 .dlg-text { line-height: 1.45; }
 .dlg-text p { margin: 0 0 6px; }
-.dlg-btns { display: flex; justify-content: center; padding: 6px 0 8px; }
+.dlg-btns { display: flex; justify-content: center; gap: 6px; padding: 6px 0 8px; }
 .dlg-btns .btn { min-width: 84px; }
+
+/* ===== Вход по паролю и установка связи ===== */
+.login-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.login-field { flex: 1; min-width: 0; height: 26px; display: flex; align-items: center; padding: 2px 5px; }
+.login-field input {
+  flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent; color: #000;
+  font: inherit; font-size: 14px; padding: 0; border-radius: 0; -webkit-appearance: none; appearance: none;
+  -webkit-user-select: text; user-select: text;
+}
+.conn-text { flex: 1; min-width: 0; }
+.conn-text p { margin: 0 0 8px; }
+.conn-text .conn-pct { margin: 4px 0 0; text-align: center; }
+/* шкала 98: утопленная рамка, синие квадратики */
+.progress { height: 20px; padding: 3px; background: var(--face); box-shadow: var(--sunken); }
+.progress-bar { width: 0; height: 100%; background: repeating-linear-gradient(90deg, var(--navy) 0 8px, transparent 8px 10px); }
 
 /* ===== Панель задач ===== */
 #taskbar {

@@ -55,10 +55,23 @@
       <path d="M15 3h2v2h1v3h1v3h1v3h1v3h1v3h1v3h1v3h1v2H5v-2h1v-3h1v-3h1v-3h1v-3h1v-3h1V8h1V5h1V3z" fill="#ffff00"/>
       <path d="M15 10h2v10h-2zM15 23h2v2h-2z" fill="#000"/>
     </symbol>
+    <symbol id="i-key" viewBox="0 0 32 32" shape-rendering="crispEdges">
+      <path d="M5 8h8v2h2v8h-2v2H5v-2H3v-8h2z" fill="#000"/>
+      <path d="M5 10h8v8H5z" fill="#ffd700"/><path d="M6 11h2v2H6z" fill="#fff"/><path d="M7 13h3v3H7z" fill="#000"/>
+      <path d="M15 12h14v4h-2v4h-3v-4h-2v3h-3v-3h-4z" fill="#000"/>
+      <path d="M15 13h13v2h-2v4h-1v-4h-4v3h-1v-3h-5z" fill="#ffd700"/>
+    </symbol>
+    <symbol id="i-net" viewBox="0 0 32 32" shape-rendering="crispEdges">
+      <path d="M1 4h18v14H1z" fill="#000"/><path d="M2 5h16v12H2z" fill="#c0c0c0"/><path d="M4 7h12v8H4z" fill="#008080"/>
+      <path d="M7 18h6v2h3v2H4v-2h3z" fill="#000"/><path d="M8 18h4v2H8z" fill="#808080"/>
+      <path d="M13 23h18v6H13z" fill="#000"/><path d="M14 24h16v4H14z" fill="#c0c0c0"/>
+      <path d="M16 26h2v1h-2z" fill="#00ff00"/><path d="M20 26h2v1h-2z" fill="#00ff00"/><path d="M24 26h4v1h-4z" fill="#808080"/>
+      <path d="M10 22h1v3h3v1h-4z" fill="#000"/>
+    </symbol>
   </svg>
 
-  <div id="desk">
-    <!-- Рабочий стол: видно, когда окно свёрнуто -->
+  <div id="desk" class="minimized">
+    <!-- Рабочий стол: с него начинается запуск (вход по паролю) и его видно, когда окно свёрнуто -->
     <div class="desk-icons">
       <button class="desk-icon" id="desk-app" type="button">
         <svg viewBox="0 0 16 16"><use href="#i-app"/></svg><span>Задачник</span>
@@ -172,6 +185,42 @@
       </div>
     </div>
 
+    <!-- Вход по паролю -->
+    <div class="modal" id="login" hidden>
+      <form class="window dialog" id="login-form" role="dialog" aria-modal="true" aria-labelledby="login-title" autocomplete="off">
+        <div class="title-bar">
+          <div class="title-bar-text" id="login-title">Вход в Задачник</div>
+          <div class="title-bar-controls"><button type="button" data-act="login-cancel" aria-label="Закрыть"></button></div>
+        </div>
+        <div class="dlg-body">
+          <svg class="dlg-icon" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-key"/></svg>
+          <div class="dlg-text">
+            <p>Введите пароль для входа в Задачник.</p>
+            <label class="login-row"><span>Пароль:</span>
+              <span class="field login-field"><input id="login-pass" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go"></span>
+            </label>
+          </div>
+        </div>
+        <div class="dlg-btns"><button class="btn default" type="submit">OK</button><button class="btn" type="button" data-act="login-cancel">Отмена</button></div>
+      </form>
+    </div>
+
+    <!-- Установка связи после верного пароля -->
+    <div class="modal" id="connect" hidden>
+      <div class="window dialog" role="dialog" aria-modal="true" aria-labelledby="conn-title">
+        <div class="title-bar"><div class="title-bar-text" id="conn-title">Установка связи</div></div>
+        <div class="dlg-body">
+          <svg class="dlg-icon" viewBox="0 0 32 32" aria-hidden="true"><use href="#i-net"/></svg>
+          <div class="dlg-text conn-text">
+            <p id="conn-status">Набор номера…</p>
+            <div class="progress"><div class="progress-bar" id="conn-bar"></div></div>
+            <p class="conn-pct" id="conn-pct">0%</p>
+          </div>
+        </div>
+        <div class="dlg-btns"><button class="btn" type="button" data-act="conn-cancel">Отмена</button></div>
+      </div>
+    </div>
+
     <!-- Панель задач -->
     <footer id="taskbar">
       <button class="btn start" id="start" type="button" data-menu="m-start">
@@ -197,6 +246,7 @@
   <script src="data/tasks-14-napryazhennost.js"></script>
   <script src="data/theory.js"></script>
   <script src="data/book-tasks.js"></script>
+  <script src="modem.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -540,9 +540,10 @@
 
   /* ---------- окна: свернуть, развернуть, закрыть ---------- */
   const onTask = () => app.classList.contains('on-task');
+  let locked = true;                     // до входа по паролю окно не открывается
   function minimize() { desk.classList.add('minimized'); renderTaskbar(); }
-  function restore() { desk.classList.remove('minimized'); renderTaskbar(); }
-  function toList() { restore(); if (onTask()) goBack(); }
+  function restore() { if (locked) return; desk.classList.remove('minimized'); renderTaskbar(); }
+  function toList() { if (locked) { showLogin(); return; } restore(); if (onTask()) goBack(); }
 
   app.addEventListener('click', e => {
     const b = e.target.closest('.title-bar-controls button');
@@ -557,6 +558,7 @@
   /* ---------- панель задач ---------- */
   const tasksBar = $('#tasks');
   function renderTaskbar() {
+    if (locked) { tasksBar.innerHTML = ''; return; }
     const min = desk.classList.contains('minimized'), tk = onTask();
     let html = `<button class="btn${!min && !tk ? ' pressed' : ''}" type="button" data-win="list">${icon('i-app')}<span>Задачник</span></button>`;
     if (tk && current) html += `<button class="btn${!min ? ' pressed' : ''}" type="button" data-win="task">${icon('i-doc')}<span>${esc(current.label)}</span></button>`;
@@ -610,7 +612,8 @@
   });
 
   function command(cmd) {
-    if (cmd === 'list') toList();
+    if (locked && (cmd === 'list' || cmd === 'find')) showLogin();
+    else if (cmd === 'list') toList();
     else if (cmd === 'find') { toList(); setTimeout(() => { q.focus(); q.select(); }, 30); }
     else if (cmd === 'min') minimize();
     else if (cmd === 'howto') showDialog('Как искать',
@@ -625,9 +628,12 @@
 
   /* ---------- окно-сообщение ---------- */
   const dlg = $('#dialog');
-  function showDialog(title, html) {
+  let dlgDone = null;
+  function showDialog(title, html, ic = 'i-info', onClose = null) {
     $('#dlg-title').textContent = title;
     $('#dlg-text').innerHTML = html;
+    $('.dlg-icon use', dlg).setAttribute('href', '#' + ic);
+    dlgDone = onClose;
     dlg.hidden = false;
     document.querySelectorAll('#app .window').forEach(w => w.classList.add('inactive'));
     $('.dlg-btns .btn', dlg).focus();
@@ -635,12 +641,83 @@
   function closeDialog() {
     dlg.hidden = true;
     document.querySelectorAll('#app .window').forEach(w => w.classList.remove('inactive'));
+    const f = dlgDone; dlgDone = null;
+    if (f) f();
   }
   dlg.addEventListener('click', e => { if (e.target.closest('[data-act="dlg-close"]')) closeDialog(); });
+
+  /* ---------- вход по паролю и «установка связи» ---------- */
+  // Пароль проверяется на телефоне: от посторонних, но не настоящая защита — код открыт
+  const PASSWORD = 'admin';
+  const login = $('#login'), pass = $('#login-pass'), conn = $('#connect');
+  function showLogin() {
+    closeMenu();
+    pass.value = '';
+    login.hidden = false;
+    pass.focus();                        // в обработчике нажатия — на iPhone сразу откроется клавиатура
+  }
+  function cancelLogin() { login.hidden = true; pass.blur(); }
+  login.addEventListener('click', e => { if (e.target.closest('[data-act="login-cancel"]')) cancelLogin(); });
+  $('#login-form').addEventListener('submit', e => {
+    e.preventDefault();
+    if (pass.value !== PASSWORD) {
+      cancelLogin();
+      showDialog('Вход в Задачник', '<p>Неверный пароль.</p><p>Проверьте пароль и повторите попытку.</p>', 'i-warn', showLogin);
+      return;
+    }
+    cancelLogin();
+    connect();
+  });
+
+  // этапы соединения: [с, текст]; шкала идёт по точкам [с, %]; всего 10 с
+  const CONN_STEPS = [[0, 'Набор номера…'], [2.3, 'Соединение с сервером…'], [4.6, 'Проверка имени пользователя и пароля…'], [9.0, 'Вход в сеть…']];
+  const CONN_PCT = [[0, 0], [2.3, 15], [4.6, 35], [9.0, 85], [9.7, 100]];
+  const CONN_END = 10;
+  let connRun = null;
+  function connect() {
+    // звук создаём сразу в обработчике нажатия, иначе iPhone его не пустит
+    const AC = window.AudioContext || window.webkitAudioContext;
+    let ctx = null, stop = null;
+    try { ctx = AC ? new AC() : null; if (ctx && ctx.state === 'suspended') ctx.resume(); } catch (err) { ctx = null; }
+    if (ctx && window.modemSound) stop = window.modemSound(ctx);
+    const bar = $('#conn-bar'), pct = $('#conn-pct'), status = $('#conn-status');
+    conn.hidden = false;
+    const start = performance.now();
+    const run = connRun = { stop, raf: 0 };
+    (function frame() {
+      const s = (performance.now() - start) / 1000;
+      status.textContent = CONN_STEPS.filter(x => x[0] <= s).pop()[1];
+      let p = 100;
+      for (let i = 1; i < CONN_PCT.length; i++) {
+        const [s0, p0] = CONN_PCT[i - 1], [s1, p1] = CONN_PCT[i];
+        if (s < s1) { p = p0 + (p1 - p0) * (s - s0) / (s1 - s0); break; }
+      }
+      // ширина — целым числом квадратиков (8 px + 2 px зазор), как в 98
+      const w = bar.parentElement.clientWidth - 6, blocks = Math.ceil(w / 10);
+      bar.style.width = Math.min(w, Math.round(blocks * p / 100) * 10) + 'px';
+      pct.textContent = Math.floor(p) + '%';
+      if (s >= CONN_END) { endConnect(); unlock(); }
+      else run.raf = requestAnimationFrame(frame);
+    })();
+  }
+  function endConnect() {
+    if (!connRun) return;
+    cancelAnimationFrame(connRun.raf);
+    if (connRun.stop) connRun.stop();
+    connRun = null;
+    conn.hidden = true;
+  }
+  conn.addEventListener('click', e => { if (e.target.closest('[data-act="conn-cancel"]')) endConnect(); });
+  function unlock() {
+    locked = false;
+    route();
+  }
 
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
     if (!dlg.hidden) closeDialog();
+    else if (!login.hidden) cancelLogin();
+    else if (!conn.hidden) endConnect();
     else if (openMenu) closeMenu();
     else if (onTask() && document.activeElement !== q) goBack();
   });

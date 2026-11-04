@@ -76,8 +76,8 @@ def build(path):
     par = int(re.search(r'§\s*(\d+)', title).group(1))
 
     i_f = find(lines, r'^#{2,3} ОСНОВНЫЕ ФОРМУЛЫ')
-    i_e = find(lines, r'^#{2,3} ПРИМЕРЫ РЕШЕНИЯ ЗАДАЧ')
-    i_t = find(lines, r'^## ЗАДАЧИ')
+    i_e = find(lines, r'^#{2,3} ПРИМЕРЫ? РЕШЕНИЯ ЗАДАЧ')
+    i_t = find(lines, r'^## (?:ВОПРОСЫ И )?ЗАДАЧИ')
     if None in (i_f, i_e, i_t):
         print(f'{path.name}: нет разделов «Основные формулы / Примеры / Задачи» — пропущен')
         return None
@@ -122,7 +122,9 @@ def build(path):
     return {'par': par, 'chapter': chapter, 'title': title, 'formulas': formulas, 'examples': out, 'tasks': tasks}
 
 
-TASK = re.compile(r'^\*\*(\d+)\.(\d+)(\\\*)?\.\*\*\s*')          # «**1.6.** …», «**2.93\*.** …»
+TASK = re.compile(r'^\*\*(\d+)\.(\d+)(\(\d\))?(\\\*)?\.?\*\*[⁰¹²³⁴⁵⁶⁷⁸⁹]*⁾?\.?\s*')
+# «**1.6.** …», «**2.93\*.** …», «**15.68**⁶⁾. …» (сноска у номера), «**25.5(1).** …» (в книге две задачи 25.5)
+ANS_ALIAS = {'25.5': '25.5(2)'}   # в ответах книги ответ 25.5 — к задаче «25.5(2)»
 PAGE_INLINE = re.compile(r'\s*<!--\s*стр\.[^>]*-->\s*')
 
 
@@ -149,7 +151,7 @@ def book_tasks(lines, par, chapter, title, page):
     out, cur, topic = [], None, ''
     for l in lines:
         s = l.strip()
-        if s == '---':
+        if s == '---' or re.match(r'<!--\s*конец', s):
             break
         pg, s2 = split_page(s)
         if pg:
@@ -163,8 +165,8 @@ def book_tasks(lines, par, chapter, title, page):
             topic = s[4:].strip()
             continue
         if m := TASK.match(s):
-            cur = {'id': f'{m.group(1)}.{m.group(2)}', 'par': par, 'chapter': chapter, 'parTitle': title,
-                   'topic': topic, 'page': page, 'star': bool(m.group(3)), 'lines': [s[m.end():]]}
+            cur = {'id': f'{m.group(1)}.{m.group(2)}{m.group(3) or ""}', 'par': par, 'chapter': chapter, 'parTitle': title,
+                   'topic': topic, 'page': page, 'star': bool(m.group(4)), 'lines': [s[m.end():]]}
             out.append(cur)
             continue
         if not cur or IMAGE.search(s) or re.fullmatch(r'\*\(.*\)\*', s):
@@ -195,7 +197,8 @@ def book_answers():
             continue
         s = l = s2
         if m := TASK.match(s):
-            cur = f'{m.group(1)}.{m.group(2)}'
+            cur = f'{m.group(1)}.{m.group(2)}{m.group(3) or ""}'
+            cur = ANS_ALIAS.get(cur, cur)
             ans[cur] = [s[m.end():]]
             continue
         if cur:

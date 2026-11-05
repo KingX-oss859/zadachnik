@@ -1,5 +1,5 @@
 /* Офлайн-кэш. При добавлении задач увеличьте VERSION — телефон подтянет новое. */
-const VERSION = 'v23';
+const VERSION = 'v26';
 const CACHE = 'zadachnik-' + VERSION;
 importScripts('sw-assets.js');   // self.FIGURE_ASSETS — картинки книги, список пишет tools/build_theory.py
 const ASSETS = [
@@ -35,6 +35,9 @@ const ASSETS = [
   'data/tasks-25-induktsiya.js',
   'data/tasks-26-energiya-magn-polya.js',
   'data/tasks-27-magnitnye-svoystva.js',
+  'data/tasks-28-geom-optika.js',
+  'data/tasks-29-fotometriya.js',
+  'data/tasks-30-interferentsiya.js',
   'data/theory.js',
   'data/book-tasks.js',
   'icons/apple-touch-icon.png',

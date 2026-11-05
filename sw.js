@@ -1,5 +1,5 @@
 /* Офлайн-кэш. При добавлении задач увеличьте VERSION — телефон подтянет новое. */
-const VERSION = 'v17';
+const VERSION = 'v23';
 const CACHE = 'zadachnik-' + VERSION;
 importScripts('sw-assets.js');   // self.FIGURE_ASSETS — картинки книги, список пишет tools/build_theory.py
 const ASSETS = [
@@ -29,6 +29,12 @@ const ASSETS = [
   'data/tasks-19-zakony-toka.js',
   'data/tasks-20-tok-v-sredah.js',
   'data/tasks-21-magnitnoe-pole.js',
+  'data/tasks-22-sila-ampera.js',
+  'data/tasks-23-sila-lorentsa.js',
+  'data/tasks-24-zakon-polnogo-toka.js',
+  'data/tasks-25-induktsiya.js',
+  'data/tasks-26-energiya-magn-polya.js',
+  'data/tasks-27-magnitnye-svoystva.js',
   'data/theory.js',
   'data/book-tasks.js',
   'icons/apple-touch-icon.png',
